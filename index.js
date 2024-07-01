@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors")
+require('dotenv').config()
 const {setToken,verifyToken} = require("./Helper/jwtVerification")
 const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
@@ -20,7 +21,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({origin:"http://localhost:5173"}))
+app.use(cors({origin:"*"}))
 app.use((req,res,next)=>{
     req.user = null
     // console.log("headers",req.headers)

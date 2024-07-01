@@ -3,9 +3,9 @@ const fs = require("fs")
 
 
 v2.config({ 
-    cloud_name: 'dyxjwfgra', 
-    api_key: '121512395199285', 
-    api_secret: '85srLbdMpDD_stX3DxfYox-1AgI' // Click 'View Credentials' below to copy your API secret
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_KEY, 
+    api_secret: process.env.CLOUDINARY_SECRETE_KEY     // Click 'View Credentials' below to copy your API secret
 });
 
 const uploadCloudinary = async (urlPath,folder,id)=>{
