@@ -7,7 +7,8 @@ var validateEmail = function(email) {
 
 const userSchema = mongoose.Schema({
     image:{
-        type:String
+        url: {type:String},
+        public_id: {type:String}
     },
     Name:{
         type:String,
@@ -39,12 +40,17 @@ const userSchema = mongoose.Schema({
     password:{
         type:String,
         required:true,
+        // select:false
         
     },
     confirmPassword:{
         type:String,
         required:true,
+        // select:false
         
+    },
+    role:{
+       type:String
     },
     token:{
         type:String,

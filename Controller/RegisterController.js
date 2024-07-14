@@ -4,7 +4,8 @@ const {compairPassword,hassPassword} =require("../Helper/HasPaword")
 const {setToken,verifyToken} = require("../Helper/jwtVerification")
 const ErrorHandler = require("../utils/Errorhandler")
 const CatchAsyncError = require("../Middleware/CatchAsyncError")
-const cloudinary = require("../utils/Cloudnary")
+const {uploadCloudinary} = require("../utils/Cloudnary")
+const nodemailer = require('nodemailer');
 const fs = require("fs")
 const createRegistration = 
 CatchAsyncError(
@@ -24,6 +25,42 @@ CatchAsyncError(
     
             })
         let aa =  await  newUser.save()
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host:"smtp.gmail.com",
+            port:587,
+            secure:false,
+            auth: {
+              user: 'saurabhwarhade77@gmail.com',
+              pass: 'xscn iohr fzji vkuz'
+            }
+          });
+          
+          var mailOptions = {
+            from: {
+              name:"shopping app Project",       // emailer name
+              address:'saurabhwarhade77@gmail.com'    // who will send email
+            },
+            to: `${email}`,
+            // to : ["saurabhwarhade28@gmail.com","pawan@gmail.com"]    list email
+            subject: 'welcome on shopping app',
+            // html:"<b>OTP for user reset password. Use it and change your password.</b>",
+            text: `welcome to shopping app your successfully done ,thanks for visiting our app`
+          };
+        //   user.otp =  genrateOtp;
+        //   await user.save()
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("welcome message successfully send on your email id")
+            //   res.status(200).json({data:true,message:"token send on your email, please check it"})
+            }
+          });
+
+
+
+
            res.status(200).json({message:"success",data:aa}) 
             
        
@@ -68,10 +105,10 @@ const profileImage = CatchAsyncError(
       console.log("file",req.file)
 
        
-    let imageUrl =  await  cloudinary(req.file.path)
+    let imageUrl =  await  uploadCloudinary(req.file.path)
     fs.unlinkSync(req.file.path)
 
-      const newUser =  await User.findOneAndUpdate({_id:id},{$set:{image:imageUrl}})
+      const newUser =  await User.findOneAndUpdate({_id:id},{$set:{image:{url:imageUrl?.url,public_id:imageUrl?.public_id}}})
 
        res.status(200).json({message:"success",data:newUser})
     }

@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const productRouter = require('./routes/Procuduct');
 const categoryRouter = require('./routes/Category');
+const reviewRouter = require('./routes/Review');
 
 var Meddleware = require("./Middleware/error")
 var app = express();
@@ -29,8 +30,9 @@ app.use((req,res,next)=>{
         
         let token = req.headers.authorization.split("Bearer ")[1]
         let user = verifyToken(token)
+         
         req.user = user;
-            //  console.log("headers",req.headers.authorization,req.user)
+           
       return  next()
    
         
@@ -44,6 +46,7 @@ app.use('/api/v1', usersRouter);
 app.use('/api/v1', loginRouter);    
 app.use('/api/v1', productRouter);    
 app.use('/api/v1', categoryRouter);    
+app.use('/api/v1', reviewRouter);    
 
 
 // catch 404 and forward to error handler
