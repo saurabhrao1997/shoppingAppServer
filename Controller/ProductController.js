@@ -48,7 +48,7 @@ const getAllProduct = CatchAsyncError(async(req,res,next)=>{
 
 const getProduct = CatchAsyncError(async(req,res,next)=>{
      let {id} = req.query
-    const newProduct  = await Product.find({_id:id})
+    const newProduct  = await Product.find({_id:id}).populate({ path:"category"})
     if(!newProduct) return next(new ErrorHandler("no product available",204))
     res.status(200).json({message:"success",data:newProduct})     
   })
@@ -83,5 +83,19 @@ const deleteProduct  = CatchAsyncError(async(req,res,next)=>{
 })
 
 
+const searchProduct = CatchAsyncError(async(req,res,next)=>{
+  let {name} = req.query
+  // description
+ const newProduct  = await Product.find({
+  $or:[
+    {name:{$regex:name,$options:"i"}},
+    // {description:{$regex:name,$options:"i"}},
+  ]
+})
+ if(!newProduct) return next(new ErrorHandler("no product available",204))
+ res.status(200).json({message:"success",data:newProduct})     
+})
 
-module.exports ={createProduct,getAllProduct,getProduct,updateProduct,deleteProduct}
+
+
+module.exports ={createProduct,getAllProduct,getProduct,updateProduct,deleteProduct,searchProduct}
