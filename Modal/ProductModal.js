@@ -24,9 +24,16 @@ const productSchema = mongoose.Schema({
     },
     rating:{
         type:String,
+        default:1
         // required:true,
     },
-    review:[{name:{type:String,},review:{type:String} }],
+    review:[{name:{type:String,},review:{
+        userName:{type:String},
+        userId:{type:mongoose.Schema.Types.ObjectId},
+        rating:{type:String},
+        comment:{type:String}
+    
+    } }],
     offer:{
         type:String,
         // required:true,

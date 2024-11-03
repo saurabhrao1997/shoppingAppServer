@@ -12,6 +12,7 @@ const loginRouter = require('./routes/login');
 const productRouter = require('./routes/Procuduct');
 const categoryRouter = require('./routes/Category');
 const reviewRouter = require('./routes/Review');
+const oderRouter = require('./routes/Oder');
 
 var Meddleware = require("./Middleware/error")
 var app = express();
@@ -47,6 +48,7 @@ app.use('/api/v1', loginRouter);
 app.use('/api/v1', productRouter);    
 app.use('/api/v1', categoryRouter);    
 app.use('/api/v1', reviewRouter);    
+app.use('/api/v1', oderRouter);    
 
 
 // catch 404 and forward to error handler

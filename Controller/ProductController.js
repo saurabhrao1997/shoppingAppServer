@@ -63,6 +63,29 @@ const updateProduct  = CatchAsyncError(async(req,res,next)=>{
 
         res.status(200).json({message:"success",data:updateProduct})    
 })
+
+const reviewProduct  = CatchAsyncError(async(req,res,next)=>{
+  let {id,review,userId} = req.body
+  const newProduct  = await Product.find({_id:id})
+  if(!newProduct) return next(new ErrorHandler("no product available",204))
+
+
+    let updateRating = newProduct?.map((obj)=> {
+    return { ...obj, rating: obj?.review?.reduce(( sum,obj,index,arr)=>{ 
+      
+      sum=   Number(sum) + (Number(obj?.review?.rating) || 1)
+      return (sum / arr.length).toString()
+    },obj?.rating || 1)}
+    })
+     
+      let reviewProduct = await Product.findByIdAndUpdate({_id:id},{
+        $set:{rating:updateRating[0]?.rating},
+        $push:{review:{name:review?.userName,review:review}}
+      })
+
+
+      res.status(200).json({message:"review successfully updated",data:reviewProduct,status:200})    
+})
 const deleteProduct  = CatchAsyncError(async(req,res,next)=>{
   let {id} = req.query
   const newProduct  = await Product.findOne({_id:id})
@@ -98,4 +121,4 @@ const searchProduct = CatchAsyncError(async(req,res,next)=>{
 
 
 
-module.exports ={createProduct,getAllProduct,getProduct,updateProduct,deleteProduct,searchProduct}
+module.exports ={createProduct,getAllProduct,getProduct,updateProduct,deleteProduct,searchProduct,reviewProduct}
